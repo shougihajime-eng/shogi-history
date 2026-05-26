@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 import "./globals.css";
+import SiteNav from "./SiteNav";
 
 export const metadata: Metadata = {
   title: "将棋の歴史｜やさしい年表とタイトルの記録",
@@ -24,15 +24,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// サイト全体の行き先メニュー（細い帯。各ページの上に出る）
-const NAV = [
-  { href: "/", label: "ホーム" },
-  { href: "/players", label: "名棋士の話" },
-  { href: "/titles", label: "8大タイトル" },
-  { href: "/ranking", label: "獲得数ランキング" },
-  { href: "/shinkenshi", label: "真剣師の裏話" },
-];
-
 export default function RootLayout({
   children,
 }: {
@@ -53,23 +44,8 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* サイト共通の細い行き先メニュー */}
-        <nav className="bg-kon text-washi">
-          <div className="mx-auto max-w-5xl px-4 py-2.5 flex flex-wrap items-center gap-x-1 gap-y-2">
-            <Link href="/" className="font-mincho text-lg mr-3 tracking-wide">
-              将棋の歴史
-            </Link>
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-md px-3 py-1 text-sm sm:text-base hover:bg-kon-light transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
+        {/* サイト共通の行き先メニュー（今いるページが光る） */}
+        <SiteNav />
 
         {children}
       </body>

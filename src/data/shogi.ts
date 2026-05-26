@@ -377,7 +377,11 @@ export const EISEI: EiseiTitle[] = [
 export type Player = {
   name: string;
   reading: string;
-  life: string; // 生年（〜没年）
+  life: string; // 生年（〜没年）の表示用文字
+  born: number; // 生まれた年（時代の帯グラフ用）
+  died?: number; // 亡くなった年（存命なら無し）
+  titles: number; // タイトル通算獲得数（強さの帯グラフ用・RANKINGと合わせる）
+  koma: string; // 駒に入れる一文字
   titleNo: string; // 名人の世（あれば）
   summary: string;
   source: keyof typeof SOURCES;
@@ -388,6 +392,10 @@ export const PLAYERS: Player[] = [
     name: "木村義雄",
     reading: "きむら よしお",
     life: "1905〜1986年",
+    born: 1905,
+    died: 1986,
+    titles: 8,
+    koma: "木",
     titleNo: "十四世名人",
     summary:
       "実力で争う名人戦で、1937年に初めての「実力制名人」になった人。タイトル通算8期。新しい名人の時代の最初の主役です。",
@@ -397,6 +405,10 @@ export const PLAYERS: Player[] = [
     name: "大山康晴",
     reading: "おおやま やすはる",
     life: "1923〜1992年",
+    born: 1923,
+    died: 1992,
+    titles: 80,
+    koma: "大",
     titleNo: "十五世名人",
     summary:
       "タイトルを通算80期も獲得した、歴代2位の大棋士。永世名人・永世王位・永世王将・永世棋聖など多くの永世称号をもち、長く将棋界の頂点に立ち続けました。",
@@ -406,6 +418,10 @@ export const PLAYERS: Player[] = [
     name: "升田幸三",
     reading: "ますだ こうぞう",
     life: "1918〜1991年",
+    born: 1918,
+    died: 1991,
+    titles: 7,
+    koma: "升",
     titleNo: "",
     summary:
       "大山康晴の最大のライバル。史上初めて名人・王将・九段の3つを同時に制しました。新しい手を生み出すことを大切にした「新手一生（しんていっしょう）」の言葉で知られます。",
@@ -415,6 +431,9 @@ export const PLAYERS: Player[] = [
     name: "中原誠",
     reading: "なかはら まこと",
     life: "1947年〜",
+    born: 1947,
+    titles: 64,
+    koma: "中",
     titleNo: "十六世名人",
     summary:
       "大山康晴のあとの時代をリードした大棋士。タイトル通算64期は歴代3位。永世名人・永世王位・名誉王座・永世棋聖などの資格をもちます。",
@@ -424,6 +443,9 @@ export const PLAYERS: Player[] = [
     name: "谷川浩司",
     reading: "たにがわ こうじ",
     life: "1962年〜",
+    born: 1962,
+    titles: 27,
+    koma: "谷",
     titleNo: "十七世名人",
     summary:
       "21歳で名人になり、当時の史上最年少名人として注目されました。すばやい寄せは「光速の寄せ」と呼ばれます。タイトル通算27期。",
@@ -433,6 +455,9 @@ export const PLAYERS: Player[] = [
     name: "羽生善治",
     reading: "はぶ よしはる",
     life: "1970年〜",
+    born: 1970,
+    titles: 99,
+    koma: "羽",
     titleNo: "十九世名人（資格）",
     summary:
       "タイトル通算99期は歴代1位。1996年には、当時の全7タイトルを同時に持つ「七冠独占」を史上初めて達成しました。長く将棋界の第一人者であり続けています。",
@@ -442,6 +467,9 @@ export const PLAYERS: Player[] = [
     name: "渡辺明",
     reading: "わたなべ あきら",
     life: "1984年〜",
+    born: 1984,
+    titles: 31,
+    koma: "渡",
     titleNo: "",
     summary:
       "竜王を連続で守り続け、初代の「永世竜王」になりました。永世棋王の資格ももちます。タイトル通算31期。",
@@ -451,6 +479,9 @@ export const PLAYERS: Player[] = [
     name: "藤井聡太",
     reading: "ふじい そうた",
     life: "2002年7月19日〜",
+    born: 2002,
+    titles: 34,
+    koma: "藤",
     titleNo: "",
     summary:
       "2023年に史上初めて、8つすべてのタイトルを同時に持つ「八冠独占」を達成。2025年には史上3人目の永世竜王の資格を得ました。タイトル通算は35期（2026年4月17日時点）まで伸び、今も記録を更新し続けています。2026年5月時点では六冠を保持。",

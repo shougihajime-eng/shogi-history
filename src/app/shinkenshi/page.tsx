@@ -30,8 +30,12 @@ const SOURCES = [
     url: "https://ja.wikipedia.org/wiki/坂田三吉",
   },
   {
-    label: "Number Web（将棋・真剣師の記事）",
-    url: "https://number.bunshun.jp/",
+    label: "Number Web「賭け将棋で生活費を稼いだ真剣師・大田学」",
+    url: "https://number.bunshun.jp/articles/-/854240",
+  },
+  {
+    label: "Number Web「羽生善治が一局指したかった最強アマ・小池重明」",
+    url: "https://number.bunshun.jp/articles/-/854241",
   },
   {
     label: "団鬼六『真剣師 小池重明』（幻冬舎アウトロー文庫）",
@@ -143,8 +147,8 @@ export default function ShinkenshiPage() {
               7勝7敗の互角で、相手が「もう一回やっても勝てる自信がない」とこぼしたとか。
             </li>
             <li>
-              <strong>羽生善治（はぶ よしはる）少年が記録係</strong>：1979年のアマ名人戦の企画で、
-              当時9歳の羽生少年が小池の対局の記録係を務めた、という逸話も。
+              <strong>羽生善治（はぶ よしはる）少年が記録係</strong>：小学生だった羽生少年が、
+              地元・八王子で開かれたアマ名人戦の予選で小池の対局の記録係を務めた、という有名な逸話も（小池のアマ名人は1980〜81年）。
             </li>
           </ul>
 
@@ -187,7 +191,7 @@ export default function ShinkenshiPage() {
               <strong>1944年に特別の「プロ五段編入試験」</strong>が開かれた。
             </li>
             <li>
-              試験ではプロ4人を相手に<strong>4勝2敗で合格</strong>。
+              試験では新鋭のプロを相手にした六番勝負を<strong>4勝2敗</strong>で勝ち越して合格。
               養成機関（奨励会）を経ずにプロになった、史上きわめて珍しい人。
             </li>
             <li>
@@ -230,7 +234,7 @@ export default function ShinkenshiPage() {
             </li>
             <li>
               真剣師を“引退”するとき、表の大会（朝日アマ名人戦）に初出場し、
-              <strong>63歳で優勝（1978年）</strong>。裏の達人が表でいきなりてっぺんを取った痛快な話。
+              <strong>63歳で優勝（第1回朝日アマ名人戦・1977年）</strong>。裏の達人が表でいきなりてっぺんを取った痛快な話。
             </li>
             <li>NHK朝の連続テレビ小説『ふたりっ子』の「銀じい」のモデルになった、とも言われる。</li>
             <li>晩年も通天閣の近くの将棋道場で、92歳まで指導を続けた。最後まで将棋の人だった。</li>
