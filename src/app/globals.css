@@ -1,0 +1,550 @@
+@import "tailwindcss";
+
+@theme {
+  /* ───── 和の配色（和紙・墨・茶・紺・朱・金茶） ───── */
+  --color-washi: #f7f1e3;
+  --color-washi-2: #f1e8d4;
+  --color-washi-3: #e8dcc0;
+  --color-washi-4: #ddcfae;
+  --color-sumi: #2a2521;
+  --color-sumi-soft: #4c453c;
+  --color-sumi-faint: #6b6258;
+  --color-cha: #6f4e37;
+  --color-cha-light: #9c7350;
+  --color-kon: #243a52;
+  --color-kon-light: #3d5d80;
+  --color-shu: #b14333;
+  --color-shu-deep: #8f3326;
+  --color-kin: #b08534;
+  --color-kin-light: #cda64a;
+
+  /* ───── 書体（明朝＝見出し / ゴシック＝本文） ───── */
+  --font-mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho",
+    "YuMincho", "HG明朝E", "MS Mincho", serif;
+  --font-gothic: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic",
+    "YuGothic", "Meiryo", sans-serif;
+}
+
+/* ============================================================
+   基本
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-washi);
+  color: var(--color-sumi);
+  font-family: var(--font-gothic);
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  /* 和紙のような淡いテクスチャ（点描）を控えめに重ねる */
+  background-image:
+    radial-gradient(rgba(111, 78, 55, 0.05) 1px, transparent 1px),
+    radial-gradient(rgba(111, 78, 55, 0.035) 1px, transparent 1px);
+  background-position: 0 0, 12px 12px;
+  background-size: 24px 24px, 24px 24px;
+  background-attachment: fixed;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(177, 67, 51, 0.22);
+}
+
+/* 見出しは明朝で */
+h1,
+h2,
+h3 {
+  font-family: var(--font-mincho);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+/* ふりがな（ルビ）を少し上品に */
+ruby rt {
+  font-size: 0.5em;
+  color: var(--color-cha);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* 章などにアンカーで飛んだとき、固定ナビに隠れないように */
+[data-era-anchor] {
+  scroll-margin-top: 88px;
+}
+
+/* ============================================================
+   駒（将棋の駒の五角形）
+   ============================================================ */
+.koma {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.koma svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================================
+   スクロールで現れる演出
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   表紙（ヒーロー）
+   ============================================================ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 92svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 表紙の背景：薄い盤の格子と、ふんわりした光 */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(111, 78, 55, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 78, 55, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    #000 0%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    #000 0%,
+    transparent 78%
+  );
+  opacity: 0.8;
+  pointer-events: none;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 40%,
+    rgba(247, 241, 227, 0) 30%,
+    rgba(221, 207, 174, 0.35) 100%
+  );
+  pointer-events: none;
+}
+
+/* ゆっくり浮かぶ表紙の駒 */
+@keyframes komaFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+.koma-float {
+  animation: komaFloat 7s ease-in-out infinite;
+}
+
+/* スクロールをうながす矢印 */
+@keyframes scrollHint {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(7px);
+    opacity: 1;
+  }
+}
+.scroll-hint {
+  animation: scrollHint 1.9s ease-in-out infinite;
+}
+
+/* ============================================================
+   時代ナビ（上に貼りつくバー）
+   ============================================================ */
+.eranav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--color-washi) 86%, transparent);
+  border-bottom: 1px solid rgba(111, 78, 55, 0.18);
+}
+.eranav-track {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+}
+.eranav-track::-webkit-scrollbar {
+  display: none;
+}
+.eranav-pill {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 78, 55, 0.28);
+  color: var(--color-sumi-soft);
+  font-family: var(--font-mincho);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.15s ease;
+}
+.eranav-pill:hover {
+  border-color: var(--color-shu);
+  color: var(--color-shu);
+}
+.eranav-pill[data-active="true"] {
+  background: var(--color-shu);
+  border-color: var(--color-shu);
+  color: var(--color-washi);
+  box-shadow: 0 4px 14px rgba(143, 51, 38, 0.28);
+}
+.eranav-pill .pill-no {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   年表（縦のタイムライン）
+   ============================================================ */
+.timeline {
+  position: relative;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+/* 中心を通る道（線） */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 22px;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(111, 78, 55, 0.45) 4%,
+    rgba(111, 78, 55, 0.45) 96%,
+    transparent 100%
+  );
+}
+
+/* 章（時代）の見出し */
+.era-head {
+  position: relative;
+  padding-left: 56px;
+  margin: 3.2rem 0 1.6rem;
+}
+.era-head .era-koma {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 44px;
+  height: 48px;
+}
+.era-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+.era-divider .line {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    to right,
+    var(--color-shu),
+    rgba(177, 67, 51, 0)
+  );
+}
+
+/* 出来事の項目 */
+.tl-item {
+  position: relative;
+  padding-left: 56px;
+  margin-bottom: 2.4rem;
+}
+.tl-node {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 44px;
+  height: 48px;
+  z-index: 2;
+}
+.tl-card {
+  position: relative;
+  background: var(--color-washi-2);
+  border: 1px solid rgba(111, 78, 55, 0.28);
+  border-radius: 10px;
+  padding: 1.15rem 1.3rem 1.2rem;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 10px 24px -16px rgba(42, 37, 33, 0.45);
+}
+/* カードの吹き出しの小さなツノ（線につながる感じ） */
+.tl-card::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: -8px;
+  width: 14px;
+  height: 14px;
+  background: var(--color-washi-2);
+  border-left: 1px solid rgba(111, 78, 55, 0.28);
+  border-bottom: 1px solid rgba(111, 78, 55, 0.28);
+  transform: rotate(45deg);
+}
+
+.tl-year {
+  font-family: var(--font-mincho);
+  font-weight: 700;
+  font-size: 1.45rem;
+  color: var(--color-shu);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+.tl-title {
+  font-family: var(--font-mincho);
+  font-weight: 700;
+  font-size: 1.28rem;
+  color: var(--color-sumi);
+  margin: 0.15rem 0 0.55rem;
+  line-height: 1.45;
+}
+.tl-body {
+  font-size: 0.97rem;
+  color: var(--color-sumi-soft);
+  line-height: 1.9;
+}
+.tl-source {
+  margin-top: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed rgba(111, 78, 55, 0.3);
+  font-size: 0.78rem;
+  color: var(--color-cha);
+  line-height: 1.6;
+}
+.tl-source .tag {
+  display: inline-block;
+  margin-right: 0.4rem;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--color-cha-light);
+  border-radius: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--color-cha);
+  transform: translateY(-1px);
+}
+
+/* 節目（大きな出来事）は金色で強調 */
+.tl-item.is-highlight .tl-card {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-kin) 9%, var(--color-washi-2)),
+    var(--color-washi-2)
+  );
+  border-color: var(--color-kin);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 12px 30px -16px rgba(176, 133, 52, 0.6);
+}
+.tl-item.is-highlight .tl-card::before {
+  background: color-mix(in srgb, var(--color-kin) 9%, var(--color-washi-2));
+  border-color: var(--color-kin);
+}
+.tl-item.is-highlight .tl-year {
+  color: var(--color-kin-light);
+}
+.tl-milestone {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.12rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-kin);
+  color: var(--color-washi);
+  font-family: var(--font-mincho);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+/* ───── パソコン・iPad（左右にふりわける） ───── */
+@media (min-width: 768px) {
+  .timeline::before {
+    left: 50%;
+    transform: translateX(-1px);
+  }
+  .era-head {
+    padding-left: 0;
+    text-align: center;
+    margin: 4.5rem 0 2.4rem;
+  }
+  .era-head .era-koma {
+    position: static;
+    margin: 0 auto 0.6rem;
+  }
+  .era-divider .line:first-child {
+    background: linear-gradient(
+      to left,
+      var(--color-shu),
+      rgba(177, 67, 51, 0)
+    );
+  }
+
+  .tl-item {
+    width: 50%;
+    padding-left: 0;
+    margin-bottom: 1.6rem;
+  }
+  .tl-item[data-side="left"] {
+    padding-right: 46px;
+    text-align: right;
+  }
+  .tl-item[data-side="right"] {
+    margin-left: 50%;
+    padding-left: 46px;
+  }
+  .tl-item[data-side="left"] .tl-node {
+    left: auto;
+    right: -22px;
+  }
+  .tl-item[data-side="right"] .tl-node {
+    left: -22px;
+  }
+  /* ツノの向きを内側（中心線）に */
+  .tl-item[data-side="left"] .tl-card::before {
+    left: auto;
+    right: -8px;
+    border-left: none;
+    border-bottom: none;
+    border-right: 1px solid rgba(111, 78, 55, 0.28);
+    border-top: 1px solid rgba(111, 78, 55, 0.28);
+  }
+  .tl-item.is-highlight[data-side="left"] .tl-card::before {
+    border-color: var(--color-kin);
+  }
+  /* 右側に寄ったときの本文の読みやすさ */
+  .tl-item[data-side="left"] .tl-source {
+    /* 右寄せでもタグが先頭に来るように */
+    text-align: right;
+  }
+}
+
+/* ============================================================
+   きょうの一枚（毎日かわるカード）
+   ============================================================ */
+.today-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-kon), #1a2d40);
+  color: var(--color-washi);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px -20px rgba(36, 58, 82, 0.8);
+}
+.today-card .label {
+  font-family: var(--font-mincho);
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: var(--color-kin-light);
+}
+.today-card .t-year {
+  font-family: var(--font-mincho);
+  color: var(--color-kin-light);
+}
+.today-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-washi);
+  border-bottom: 1px solid rgba(247, 241, 227, 0.5);
+  transition: gap 0.2s ease, border-color 0.2s ease;
+}
+.today-jump:hover {
+  gap: 0.7rem;
+  border-color: var(--color-kin-light);
+}
+
+/* ============================================================
+   動きを減らす設定の人には演出を控える
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .koma-float,
+  .scroll-hint {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   印刷用（パソコンで「印刷する」を押したとき）
+   ============================================================ */
+@media print {
+  /* 和紙の点描テクスチャを消して、白い紙に黒い文字で */
+  html,
+  body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #000 !important;
+  }
+
+  /* メニュー・ボタンなど、印刷に出したくないものを隠す */
+  .no-print {
+    display: none !important;
+  }
+
+  /* 問題用紙は枠線・影なし、余白ゼロで紙いっぱいに */
+  .print-area {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  /* リンクの下線・色は控えめに */
+  a {
+    text-decoration: none !important;
+    color: #000 !important;
+  }
+}
