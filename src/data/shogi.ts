@@ -159,8 +159,10 @@ export const HISTORY: HistoryEntry[] = [
 export type Title = {
   name: string;
   reading: string;
-  founded: string; // タイトル戦としての始まり
+  founded: string; // タイトル戦としての始まり（表示用の文字）
+  foundedYear: number; // タイトル戦になった年（「できた順」に並べるための数値）
   foundedNote?: string;
+  koma: string; // 駒の中に入れる一文字（できた順の図解で使う）
   holder: string; // 今の保持者（2026年5月時点）
   holderNote?: string;
   eiseiName: string; // 永世称号の名前
@@ -173,6 +175,9 @@ export const TITLES: Title[] = [
     name: "竜王",
     reading: "りゅうおう",
     founded: "1988年",
+    foundedYear: 1988,
+    foundedNote: "前身の九段戦・十段戦を受けつぎ、賞金最高額のタイトルとして誕生",
+    koma: "竜",
     holder: "藤井聡太",
     eiseiName: "永世竜王",
     eiseiCondition: "連続5期 または 通算7期",
@@ -182,7 +187,9 @@ export const TITLES: Title[] = [
     name: "名人",
     reading: "めいじん",
     founded: "1937年",
+    foundedYear: 1937,
     foundedNote: "実力で争う名人戦の始まり（名人戦自体は1935年開始）",
+    koma: "名",
     holder: "藤井聡太",
     eiseiName: "永世名人（世襲称号・十四世名人〜）",
     eiseiCondition: "通算5期",
@@ -192,6 +199,8 @@ export const TITLES: Title[] = [
     name: "王位",
     reading: "おうい",
     founded: "1960年",
+    foundedYear: 1960,
+    koma: "位",
     holder: "藤井聡太",
     eiseiName: "永世王位",
     eiseiCondition: "連続5期 または 通算10期",
@@ -200,7 +209,9 @@ export const TITLES: Title[] = [
     name: "叡王",
     reading: "えいおう",
     founded: "2017年",
+    foundedYear: 2017,
     foundedNote: "2015年に一般棋戦として始まり、2017年にタイトル戦へ昇格",
+    koma: "叡",
     holder: "伊藤匠",
     holderNote: "2026年5月時点（叡王戦五番勝負を防衛中）",
     eiseiName: "永世叡王",
@@ -210,7 +221,9 @@ export const TITLES: Title[] = [
     name: "王座",
     reading: "おうざ",
     founded: "1983年",
+    foundedYear: 1983,
     foundedNote: "1953年に優勝棋戦として始まり、1983年にタイトル戦へ昇格",
+    koma: "座",
     holder: "伊藤匠",
     eiseiName: "名誉王座",
     eiseiCondition: "連続5期 または 通算10期",
@@ -219,6 +232,8 @@ export const TITLES: Title[] = [
     name: "棋王",
     reading: "きおう",
     founded: "1975年",
+    foundedYear: 1975,
+    koma: "棋",
     holder: "藤井聡太",
     eiseiName: "永世棋王",
     eiseiCondition: "連続5期のみ",
@@ -227,6 +242,8 @@ export const TITLES: Title[] = [
     name: "王将",
     reading: "おうしょう",
     founded: "1951年",
+    foundedYear: 1951,
+    koma: "将",
     holder: "藤井聡太",
     eiseiName: "永世王将",
     eiseiCondition: "通算10期",
@@ -235,6 +252,8 @@ export const TITLES: Title[] = [
     name: "棋聖",
     reading: "きせい",
     founded: "1962年",
+    foundedYear: 1962,
+    koma: "聖",
     holder: "藤井聡太",
     eiseiName: "永世棋聖",
     eiseiCondition: "通算5期",

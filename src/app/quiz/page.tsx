@@ -5,7 +5,7 @@ import QuizClient from "./QuizClient";
 export const metadata: Metadata = {
   title: "将棋の歴史クイズ｜やさしい三択",
   description:
-    "将棋の歴史や女流棋士のあゆみから、事実をもとにした三択クイズ。やさしい・ふつう・むずかしいの3段階から選んでランダムに出題。パソコンなら問題用紙として印刷もできます。",
+    "将棋の歴史・戦法・名棋士・8大タイトル・女流棋士のあゆみから、事実をもとにした三択クイズ。やさしい・ふつう・むずかしいの3段階から選んでランダムに出題。パソコンなら問題用紙として印刷もできます。",
 };
 
 export default function QuizPage() {
@@ -18,7 +18,7 @@ export default function QuizPage() {
             href="/"
             className="inline-block text-washi-3 text-sm hover:text-kin transition-colors"
           >
-            ← 年表（将棋の歴史）にもどる
+            ← ホームにもどる
           </Link>
           <p className="font-mincho tracking-[0.3em] text-kin text-sm mt-4">
             SHOGI HISTORY QUIZ
@@ -30,7 +30,7 @@ export default function QuizPage() {
             </span>
           </h1>
           <p className="mt-5 text-washi-2 leading-relaxed text-sm sm:text-base">
-            将棋の歴史や女流棋士のあゆみから、事実をもとにした問題をランダムに出します。
+            将棋の歴史・戦法・名棋士・8大タイトル・女流棋士のあゆみから、事実をもとにした問題をランダムに出します。
             むずかしさを選んで、ひとつずつ挑戦してもよし。パソコンなら「問題用紙」として印刷もできます。
           </p>
         </div>

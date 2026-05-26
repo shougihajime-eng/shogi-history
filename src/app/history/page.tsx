@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { HISTORY, SOURCES, LAST_VERIFIED } from "@/data/shogi";
 import ReadingAids from "../ReadingAids";
+import Koma from "../Koma";
 
 export const metadata: Metadata = {
   title: "将棋の歴史｜やさしい年表",
@@ -17,6 +18,7 @@ type Strategy = {
   yomi: string;
   summary: string;
   origin?: string;
+  aim?: string; // ねらい（どう攻める／守るか）
   timeline: { when: string; what: string }[];
 };
 
@@ -31,7 +33,7 @@ const furibisha: Strategy[] = [
       { when: "1607年（江戸の初め）", what: "現存する最古の記録。初代・大橋宗桂 対 本因坊算砂の対局で、後手の算砂が採用。" },
       { when: "1853年", what: "天野宗歩の定跡書『将棋精選』に、四間飛車＋美濃囲いの形が登場。" },
       { when: "1960年代（昭和）", what: "大山康晴 十五世名人が愛用し、全盛期を築く。森安秀光も主要な担い手。" },
-      { when: "1990年代後半", what: "藤井猛が「藤井システム」を確立。1997年に升田幸三賞を受賞。" },
+      { when: "1990年代後半", what: "藤井猛が「藤井システム」を確立し、升田幸三賞を受賞（受賞年の表記は資料により1996年度・1997年で揺れあり）。" },
       { when: "2010年", what: "広瀬章人が「四間飛車穴熊」で王位を獲得し、大ブームに。" },
     ],
   },
@@ -55,7 +57,7 @@ const furibisha: Strategy[] = [
       "「ゴキゲン中飛車」の名は、雑誌『将棋世界』元編集長の大崎善生が「コンちゃん、いつもゴキゲンだから」と名付けました。",
     timeline: [
       { when: "1996年〜", what: "近藤正和が「ゴキゲン中飛車」を開発。デビュー直後に活躍。" },
-      { when: "2002年度", what: "ゴキゲン中飛車の開発で近藤正和が升田幸三賞を受賞。棋士の間で大流行。" },
+      { when: "2000年代はじめ", what: "ゴキゲン中飛車の開発で近藤正和が升田幸三賞を受賞。棋士の間で大流行（受賞年度は資料により2001年度・2002年度で揺れあり）。" },
     ],
   },
   {
@@ -88,11 +90,11 @@ const ibisha: Strategy[] = [
     name: "矢倉",
     yomi: "やぐら",
     summary:
-      "飛車を振らずに戦う「相居飛車」の代表。金銀でがっちり囲う正統派で「将棋の純文学」とも呼ばれます。",
+      "飛車を振らずに戦う「相居飛車」の代表。金銀でがっちり囲う正統派で、米長邦雄が「将棋の純文学」と呼んだことで知られます。",
     origin: "もとはお城の防御の建物「櫓（やぐら）」の字を当てていました。守りの堅さにちなむ名前です。",
     timeline: [
       { when: "江戸時代", what: "大橋宗英の『将棋歩式』に「先手櫓」などと登場。昭和後期に「矢倉」表記が一般化。" },
-      { when: "現代", what: "相掛かり・角換わり・横歩取りと並ぶ「相居飛車の四大戦法」のひとつ。" },
+      { when: "現代", what: "相掛かり・角換わり・横歩取りと並ぶ、いわゆる「相居飛車の四大戦法」のひとつ。" },
     ],
   },
   {
@@ -119,6 +121,54 @@ const ibisha: Strategy[] = [
     timeline: [
       { when: "江戸末期", what: "江戸時代末期に成立。長くプロでは指されなかった。" },
       { when: "昭和", what: "升田幸三らが定跡を整え、公式戦で活躍して広く知られるようになった。" },
+    ],
+  },
+  {
+    name: "棒銀",
+    yomi: "ぼうぎん",
+    summary:
+      "銀を「棒」のようにまっすぐ前線へ繰り出し、飛車と力を合わせて攻め込む、いちばん基本的な攻めの戦法。初心者の教科書ともいわれます。",
+    aim: "銀を相手陣の近くまで進め、飛車先（飛車の前の道）を突破するねらい。攻めが分かりやすいのが魅力です。",
+    origin: "「飛車と銀が一直線（棒のよう）に並ぶ形」から名付けられたとされます（加藤治郎 名誉九段の記述）。",
+    timeline: [
+      { when: "1642年（江戸）", what: "のちの三世名人・初代伊藤宗看の対局に、棒銀の形（2六銀）が現れる。古くからある形。" },
+      { when: "1894年（明治27年）", what: "「棒銀」の名が、飯万島竜水の定跡書『新案定跡高等将棋秘訣』に初めて登場。" },
+      { when: "大正", what: "1917年の関根金次郎の本では「馬鹿銀」と呼ばれ高段者は避けたが、のちに評価が高まった。" },
+    ],
+  },
+  {
+    name: "右四間飛車",
+    yomi: "みぎしけんびしゃ",
+    summary:
+      "居飛車のまま、飛車を右から4番目の筋に置いて一点に狙いを定める攻めの戦法。特にアマチュアに人気です。",
+    aim: "飛車・角・銀・桂を同じ地点（多くは相手の角の頭）に集中させ、一気に攻めつぶすねらい。対策していない相手には強烈です。",
+    timeline: [
+      { when: "1605年（江戸の初め）", what: "対振り飛車の戦法としては最古とされ、大橋宗桂 対 本因坊算砂戦が第一号局とされる。" },
+      { when: "現代", what: "プロでは中川大輔、アマ強豪では鈴木英春が使い手として知られる。" },
+    ],
+  },
+  {
+    name: "雁木",
+    yomi: "がんぎ",
+    summary:
+      "銀を中央寄りに二枚ならべて受け止める、しなやかな居飛車の戦法・囲い。名前は階段（雁木）の形に由来します。",
+    aim: "がっちり固める矢倉とちがい、左右どちらの攻めにも対応しやすい、バランス重視の構えです。",
+    origin: "江戸前期、在野の強豪・檜垣是安が、船着き場や寺社の階段（雁木）を見て考案したと伝わります。",
+    timeline: [
+      { when: "江戸前期", what: "檜垣是安が考案と伝わる。当時は対振り飛車の引き角戦法を雁木と呼んだ。" },
+      { when: "長く不遇", what: "矢倉に押され、「B級戦法」あつかいでプロではあまり指されなかった。" },
+      { when: "2016年ごろ", what: "AI（コンピュータ将棋）が指したことで再評価され、流行戦法としてよみがえった。" },
+    ],
+  },
+  {
+    name: "ひねり飛車",
+    yomi: "ひねりびしゃ",
+    summary:
+      "相掛かりから飛車を左へ「ひねって」回し、石田流のような形で攻める居飛車の戦法。",
+    aim: "浮かせた飛車を左の翼へ転換し、相手の弱点（3四の歩など）を狙う。飛車を横にひねる動きが名前の由来です。",
+    timeline: [
+      { when: "戦後", what: "新戦法「縦歩取り」をもとに角田三男が開発。1970年代初頭に高い勝率で流行した。" },
+      { when: "近年", what: "プロ公式戦ではあまり見られなくなったが、若手による独自の工夫も生まれている。" },
     ],
   },
 ];
@@ -153,7 +203,7 @@ const joryuHistory: { year: string; title: string; body: string }[] = [
   {
     year: "2011〜13年",
     title: "里見香奈、男性のプロ養成機関へ",
-    body: "里見香奈（さとみ かな／現・福間香奈）さんが、棋士をめざす養成機関「奨励会」に編入。2013年には女性で初めて三段リーグ入りを果たしました。",
+    body: "里見香奈（さとみ かな／現・福間香奈）さんが、棋士をめざす養成機関「奨励会」に編入。2013年には女性で初めて奨励会の三段に昇段しました（三段リーグでの対局は翌2014年から）。",
   },
   {
     year: "2024〜25年",
@@ -167,16 +217,16 @@ const joryuHistory: { year: string; title: string; body: string }[] = [
   },
 ];
 
-// 女流タイトル（できた順）
-const joryuTitles: { name: string; reading: string; born: string; note: string }[] = [
-  { name: "女流名人戦", reading: "じょりゅうめいじんせん", born: "1974年", note: "いちばん最初にできた女流タイトル。" },
-  { name: "女流王将戦", reading: "じょりゅうおうしょうせん", born: "1978年", note: "2つめにできたタイトル。" },
-  { name: "女流王位戦", reading: "じょりゅうおういせん", born: "1990年", note: "（創設は1989年度）" },
-  { name: "倉敷藤花戦", reading: "くらしきとうかせん", born: "1993年", note: "岡山県・倉敷市が舞台のタイトル。" },
-  { name: "女王（マイナビ女子オープン）", reading: "じょおう", born: "2008年", note: "「女王」の称号をかけて戦います。" },
-  { name: "女流王座戦", reading: "じょりゅうおうざせん", born: "2011年", note: "海外でも対局が行われることがあります。" },
-  { name: "清麗戦", reading: "せいれいせん", born: "2019年", note: "比較的新しいタイトル。" },
-  { name: "白玲戦", reading: "はくれいせん", born: "2021年", note: "いちばん新しく、今は女流の最高位（序列1位）のタイトル。" },
+// 女流タイトル（できた順）　koma＝駒に入れる一文字
+const joryuTitles: { name: string; reading: string; born: string; koma: string; note: string }[] = [
+  { name: "女流名人戦", reading: "じょりゅうめいじんせん", born: "1974年", koma: "名", note: "いちばん最初にできた女流タイトル。" },
+  { name: "女流王将戦", reading: "じょりゅうおうしょうせん", born: "1978年", koma: "将", note: "2つめにできたタイトル。" },
+  { name: "女流王位戦", reading: "じょりゅうおういせん", born: "1990年", koma: "位", note: "（創設は1989年度）" },
+  { name: "倉敷藤花戦", reading: "くらしきとうかせん", born: "1993年", koma: "藤", note: "岡山県・倉敷市が舞台のタイトル。" },
+  { name: "女王（マイナビ女子オープン）", reading: "じょおう", born: "2008年", koma: "女", note: "「女王」の称号をかけて戦います。" },
+  { name: "女流王座戦", reading: "じょりゅうおうざせん", born: "2011年", koma: "座", note: "海外でも対局が行われることがあります。" },
+  { name: "清麗戦", reading: "せいれいせん", born: "2019年", koma: "清", note: "比較的新しいタイトル。" },
+  { name: "白玲戦", reading: "はくれいせん", born: "2021年", koma: "白", note: "いちばん新しく、今は女流の最高位（序列1位）のタイトル。" },
 ];
 
 const joryuHolders = [
@@ -193,6 +243,10 @@ const pageSources = [
   { label: "ウィキペディア「女流棋士 (将棋)」", url: "https://ja.wikipedia.org/wiki/女流棋士_(将棋)" },
   { label: "ウィキペディア「将棋の女流タイトル在位者一覧」", url: "https://ja.wikipedia.org/wiki/将棋の女流タイトル在位者一覧" },
   { label: "東京新聞「女性初、日本将棋連盟会長に就任 清水市代さん」", url: "https://www.tokyo-np.co.jp/article/421940" },
+  { label: "ウィキペディア「棒銀」", url: "https://ja.wikipedia.org/wiki/棒銀" },
+  { label: "ウィキペディア「右四間飛車」", url: "https://ja.wikipedia.org/wiki/右四間飛車" },
+  { label: "ウィキペディア「雁木囲い」", url: "https://ja.wikipedia.org/wiki/雁木囲い" },
+  { label: "ウィキペディア「ひねり飛車」", url: "https://ja.wikipedia.org/wiki/ひねり飛車" },
 ];
 
 /* =========================================================================
@@ -219,6 +273,12 @@ function StrategyCard({ s }: { s: Strategy }) {
         </ruby>
       </p>
       <p className="text-sumi-soft text-sm leading-relaxed mt-2">{s.summary}</p>
+      {s.aim && (
+        <p className="mt-2 border-l-2 border-kon-light/60 pl-3 text-sm leading-relaxed text-kon">
+          <span className="font-bold">ねらい：</span>
+          {s.aim}
+        </p>
+      )}
       {s.origin && (
         <p className="mt-3 rounded bg-washi-3/60 px-3 py-2 text-sm leading-relaxed text-cha">
           <span className="font-bold">名前の由来：</span>
@@ -393,12 +453,12 @@ export default function HistoryPage() {
           </p>
 
           <ol className="space-y-3">
-            {joryuTitles.map((t, i) => (
+            {joryuTitles.map((t) => (
               <li
                 key={t.name}
                 className="flex items-center gap-4 rounded-lg bg-washi-2 border border-cha-light/30 px-4 py-3"
               >
-                <span className="font-mincho text-2xl text-cha-light w-8 text-center shrink-0">{i + 1}</span>
+                <Koma char={t.koma} className="h-11 w-10 shrink-0" title={`${t.name}（${t.born}）`} />
                 <div className="flex-1 min-w-0">
                   <p className="font-mincho text-lg text-sumi leading-tight">
                     <ruby>

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { LAST_VERIFIED } from "@/data/shogi";
 
 export const metadata: Metadata = {
   title: "将棋の歴史｜やさしい年表とタイトルの記録",
@@ -25,12 +24,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// サイト全体の行き先メニュー（細い帯。各ページの上に出る）
 const NAV = [
   { href: "/", label: "ホーム" },
-  { href: "/history", label: "将棋の歴史" },
   { href: "/players", label: "名棋士の話" },
   { href: "/titles", label: "8大タイトル" },
   { href: "/ranking", label: "獲得数ランキング" },
+  { href: "/shinkenshi", label: "真剣師の裏話" },
 ];
 
 export default function RootLayout({
@@ -52,45 +52,26 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col">
-        <header className="bg-kon text-washi shadow-md">
-          <div className="mx-auto max-w-5xl px-4 py-4">
-            <Link href="/" className="inline-block">
-              <span className="font-mincho text-2xl sm:text-3xl tracking-wide">
-                将棋の歴史
-              </span>
-              <span className="ml-2 text-sm text-washi-3">
-                やさしい年表とタイトルの記録
-              </span>
+      <body>
+        {/* サイト共通の細い行き先メニュー */}
+        <nav className="bg-kon text-washi">
+          <div className="mx-auto max-w-5xl px-4 py-2.5 flex flex-wrap items-center gap-x-1 gap-y-2">
+            <Link href="/" className="font-mincho text-lg mr-3 tracking-wide">
+              将棋の歴史
             </Link>
-            <nav className="mt-3 flex flex-wrap gap-x-1 gap-y-2 text-sm sm:text-base">
-              {NAV.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-md px-3 py-1.5 hover:bg-kon-light transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-md px-3 py-1 text-sm sm:text-base hover:bg-kon-light transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
-        </header>
+        </nav>
 
-        <main className="flex-1">{children}</main>
-
-        <footer className="mt-12 border-t-2 border-cha-light/30 bg-washi-2">
-          <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-sumi-soft">
-            <p className="font-mincho text-base text-cha">このサイトの約束</p>
-            <p className="mt-2 leading-relaxed">
-              ここに載せている数字や出来事は、すべて公式や信頼できる資料で確かめた事実だけです。
-              でたらめや当てずっぽうは載せていません。各ページの下に「どこで確かめたか（出典）」を書いています。
-            </p>
-            <p className="mt-3 text-xs text-cha">
-              最終確認日：{LAST_VERIFIED}　／　主な出典：日本将棋連盟、ウィキペディア（将棋・棋戦・永世称号 ほか）
-            </p>
-          </div>
-        </footer>
+        {children}
       </body>
     </html>
   );

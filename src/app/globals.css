@@ -548,3 +548,307 @@ ruby rt {
     color: #000 !important;
   }
 }
+
+/* ============================================================
+   読み物ページ共通（戦法の歴史・真剣師の裏話・トップ）
+   ============================================================ */
+.read-wrap {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 0 1.1rem;
+}
+
+.read-hero {
+  text-align: center;
+  padding: 3.4rem 1rem 1.2rem;
+}
+.read-hero .eyebrow {
+  font-family: var(--font-mincho);
+  letter-spacing: 0.24em;
+  color: var(--color-cha);
+  font-size: 0.8rem;
+}
+.read-hero h1 {
+  font-size: clamp(2rem, 6.5vw, 3.1rem);
+  margin: 0.5rem 0 0.7rem;
+  color: var(--color-sumi);
+}
+.read-hero .lead {
+  color: var(--color-sumi-soft);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+/* 注意書き・楽しみ方の箱 */
+.note-box {
+  background: color-mix(in srgb, var(--color-kin) 9%, var(--color-washi-2));
+  border: 1px solid var(--color-kin);
+  border-radius: 12px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.6rem 0;
+  font-size: 0.92rem;
+  color: var(--color-sumi-soft);
+  line-height: 1.85;
+}
+.note-box .note-title {
+  font-family: var(--font-mincho);
+  color: var(--color-cha);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 1rem;
+}
+
+/* 章 */
+.sec {
+  margin: 2.8rem 0;
+}
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.1rem;
+}
+.sec-head h2 {
+  font-size: clamp(1.4rem, 4.5vw, 1.95rem);
+  color: var(--color-sumi);
+  white-space: nowrap;
+}
+.sec-head .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--color-shu), rgba(177, 67, 51, 0));
+}
+.sec p {
+  color: var(--color-sumi-soft);
+  margin: 0.7rem 0;
+}
+.sec p strong,
+.person-card strong,
+.fact-card strong {
+  color: var(--color-shu-deep);
+  font-weight: 700;
+}
+
+/* 人物カード */
+.person-card {
+  position: relative;
+  background: var(--color-washi-2);
+  border: 1px solid rgba(111, 78, 55, 0.28);
+  border-radius: 14px;
+  padding: 1.5rem 1.4rem 1.6rem;
+  margin: 1.5rem 0;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 16px 38px -24px rgba(42, 37, 33, 0.65);
+}
+.person-card .pc-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+}
+.person-card .pc-name {
+  font-family: var(--font-mincho);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-sumi);
+  letter-spacing: 0.03em;
+}
+.alias-badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: var(--color-shu);
+  color: var(--color-washi);
+  font-family: var(--font-mincho);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  box-shadow: 0 4px 12px -4px rgba(143, 51, 38, 0.5);
+}
+.pc-sub {
+  color: var(--color-cha);
+  font-size: 0.85rem;
+  margin: 0.1rem 0 0.6rem;
+}
+.pc-block-title {
+  font-family: var(--font-mincho);
+  font-weight: 700;
+  color: var(--color-kon);
+  margin: 1.1rem 0 0.5rem;
+  font-size: 1.05rem;
+}
+.episode-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.episode-list > li {
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.85;
+  color: var(--color-sumi-soft);
+}
+.episode-list > li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  color: var(--color-shu);
+  font-size: 0.7rem;
+}
+
+/* セリフ・名言の箱 */
+.quote-box {
+  position: relative;
+  margin: 1.1rem 0 0.4rem;
+  padding: 1.05rem 1.2rem 1rem 2.5rem;
+  background: linear-gradient(180deg, #26384c, #1a2a3a);
+  color: var(--color-washi);
+  border-radius: 10px;
+  font-family: var(--font-mincho);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+.quote-box::before {
+  content: "“";
+  position: absolute;
+  left: 0.65rem;
+  top: 0.1rem;
+  font-size: 2.3rem;
+  color: var(--color-kin-light);
+}
+.quote-box .who {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--color-kin-light);
+  font-family: var(--font-gothic);
+}
+
+/* 裏のしくみ：2列カード */
+.fact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+@media (min-width: 640px) {
+  .fact-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.fact-card {
+  background: var(--color-washi-2);
+  border: 1px solid rgba(111, 78, 55, 0.28);
+  border-top: 4px solid var(--color-cha-light);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem 1.2rem;
+}
+.fact-card h3 {
+  font-size: 1.08rem;
+  color: var(--color-shu-deep);
+  margin-bottom: 0.45rem;
+}
+.fact-card p {
+  font-size: 0.92rem;
+  color: var(--color-sumi-soft);
+  margin: 0;
+  line-height: 1.85;
+}
+
+/* 本のリスト */
+.book-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.book-list li {
+  padding: 0.85rem 1.05rem;
+  background: var(--color-washi-2);
+  border: 1px solid rgba(111, 78, 55, 0.28);
+  border-left: 4px solid var(--color-kin);
+  border-radius: 8px;
+  font-size: 0.93rem;
+  color: var(--color-sumi-soft);
+}
+.book-list .bt {
+  font-family: var(--font-mincho);
+  font-weight: 700;
+  color: var(--color-sumi);
+}
+
+/* 出典の足もと */
+.src-foot {
+  margin: 2.6rem 0 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(111, 78, 55, 0.4);
+  font-size: 0.8rem;
+  color: var(--color-cha);
+  line-height: 1.85;
+}
+.src-foot a {
+  color: var(--color-kon-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* トップページの入口カード */
+.home-card {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 1.9rem 1.7rem;
+  border: 1px solid rgba(111, 78, 55, 0.3);
+  background: var(--color-washi-2);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 16px 42px -26px rgba(42, 37, 33, 0.6);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.home-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-shu);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 24px 52px -26px rgba(42, 37, 33, 0.7);
+}
+.home-card .hc-no,
+.home-card .hc-title,
+.home-card .hc-desc,
+.home-card .hc-go {
+  display: block;
+}
+.home-card .hc-no {
+  font-family: var(--font-mincho);
+  color: var(--color-kin);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+}
+.home-card .hc-title {
+  font-family: var(--font-mincho);
+  font-size: 1.7rem;
+  color: var(--color-sumi);
+  margin: 0.25rem 0 0.55rem;
+}
+.home-card .hc-desc {
+  color: var(--color-sumi-soft);
+  font-size: 0.92rem;
+  line-height: 1.85;
+}
+.home-card .hc-go {
+  margin-top: 1rem;
+  color: var(--color-shu);
+  font-family: var(--font-mincho);
+  letter-spacing: 0.05em;
+}
