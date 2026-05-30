@@ -345,22 +345,38 @@ export default function HistoryPage() {
       />
       <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
 
-      <nav className="mt-6 flex flex-wrap gap-2 text-sm">
-        {[
-          ["#zentai", "将棋ぜんたいの歴史"],
-          ["#senpo", "戦法（戦い方）の歴史"],
-          ["#joryu", "女流棋士の歴史"],
-          ["#jtitles", "女流タイトルの流れ"],
-          ["#sources", "出典"],
-        ].map(([href, label]) => (
-          <a
-            key={href}
-            href={href}
-            className="rounded-full border border-cha-light/40 px-4 py-1.5 text-cha hover:bg-washi-3/60 transition-colors"
-          >
-            {label}
-          </a>
-        ))}
+      {/* 目次（もくじ）：各章の駒（王・角・玉・金・歩）と「その一〜五」を添えた本格的な目次カード。
+          長い年表でも、見たい所へひと押しで飛べる。出典は章とは性格が違うので最後に横いっぱいで。 */}
+      <nav aria-label="もくじ" className="mt-6 rounded-xl border border-cha-light/30 bg-washi-2/70 p-4 sm:p-5">
+        <p className="mb-3 flex items-center gap-2 font-mincho text-sm tracking-widest text-shu">
+          <span className="inline-block h-2 w-2 rotate-45 bg-shu" aria-hidden="true" />
+          もくじ
+        </p>
+        <ol className="grid gap-2 sm:grid-cols-2">
+          {[
+            ["#zentai", "その一", "王", "将棋ぜんたいの歴史"],
+            ["#senpo", "その二", "角", "戦法（戦い方）の歴史"],
+            ["#joryu", "その三", "玉", "女流棋士の歴史"],
+            ["#jtitles", "その四", "金", "女流タイトルの流れ"],
+            ["#sources", "その五", "歩", "出典"],
+          ].map(([href, kicker, koma, label], i, arr) => (
+            <li key={href} className={i === arr.length - 1 ? "sm:col-span-2" : undefined}>
+              <a
+                href={href}
+                className="group flex items-center gap-3 rounded-lg border border-cha-light/30 bg-washi px-3 py-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-shu hover:shadow-sm"
+              >
+                <Koma char={koma} className="h-8 w-7 shrink-0" />
+                <span className="min-w-0">
+                  <span className="block font-mincho text-xs tracking-widest text-cha">{kicker}</span>
+                  <span className="block font-mincho leading-tight text-sumi">{label}</span>
+                </span>
+                <span className="ml-auto text-shu opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
       </nav>
 
       <div className="mt-12 space-y-20">
