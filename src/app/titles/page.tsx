@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { TITLES, EISEI, CURRENT_HOLDERS, SOURCES, LAST_VERIFIED } from "@/data/shogi";
 import Koma from "../Koma";
+import PageHero from "@/components/PageHero";
+import SectionHeading from "@/components/SectionHeading";
 
 // できた順（古い→新しい）にならべたタイトル
 const BY_FOUNDED = [...TITLES].sort((a, b) => a.foundedYear - b.foundedYear);
@@ -13,15 +15,15 @@ export const metadata: Metadata = {
 
 export default function TitlesPage() {
   return (
-    <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
-      <p className="font-mincho tracking-[0.3em] text-shu text-sm">8 TITLES</p>
-      <h1 className="font-mincho text-3xl sm:text-4xl mt-2 text-sumi leading-tight">8大タイトル</h1>
-      <p className="mt-5 text-sumi-soft leading-relaxed text-sm sm:text-base">
-        プロの将棋には、頂点をかけて争う <span className="font-bold text-cha">8つのタイトル戦</span> があります。
-        中でも <span className="font-bold text-cha">竜王（りゅうおう）</span> と
-        <span className="font-bold text-cha">名人（めいじん）</span> は別格とされています。
-        それぞれを長く取り続けた人には、引退後も名乗れる「永世（えいせい＝一生の）称号」が贈られます。
-      </p>
+    <>
+      <PageHero
+        kicker="8 TITLES ・ 八大タイトル"
+        title="8大タイトル"
+        koma="竜"
+        tone="gold"
+        lead="プロの将棋には、頂点をかけて争う8つのタイトル戦があります。中でも竜王と名人は別格。長く取り続けた人には、引退後も名乗れる「永世（えいせい＝一生の）称号」が贈られます。"
+      />
+      <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
 
       {/* いまの保持者まとめ */}
       <div className="mt-8 rounded-xl bg-kon text-washi p-6">
@@ -43,9 +45,7 @@ export default function TitlesPage() {
 
       {/* できた順の図解 */}
       <section className="mt-14">
-        <h2 className="font-mincho text-2xl text-sumi border-b-2 border-cha-light/40 pb-2">
-          できた順にならべると
-        </h2>
+        <SectionHeading koma="歩">できた順にならべると</SectionHeading>
         <p className="mt-3 text-sumi-soft text-sm sm:text-base leading-relaxed">
           8つのタイトルは、いっぺんにできたわけではありません。いちばん古い
           <span className="font-bold text-cha"> 名人 </span>（1937年）から、いちばん新しい
@@ -100,9 +100,7 @@ export default function TitlesPage() {
       </section>
 
       {/* タイトル一覧（ひとつずつ） */}
-      <h2 className="mt-14 font-mincho text-2xl text-sumi border-b-2 border-cha-light/40 pb-2">
-        ひとつずつ、くわしく
-      </h2>
+      <SectionHeading koma="銀" className="mt-14">ひとつずつ、くわしく</SectionHeading>
       <div className="mt-6 space-y-4">
         {TITLES.map((t) => (
           <article
@@ -154,9 +152,7 @@ export default function TitlesPage() {
 
       {/* 永世称号の保持者 */}
       <section className="mt-14">
-        <h2 className="font-mincho text-2xl text-sumi border-b-2 border-cha-light/40 pb-2">
-          永世称号（一生の称号）の資格をもつ人
-        </h2>
+        <SectionHeading koma="玉">永世称号（一生の称号）の資格をもつ人</SectionHeading>
         <p className="mt-3 text-sumi-soft text-sm leading-relaxed">
           同じタイトルを長く取り続けた人だけが名乗れる、特別な称号です。
         </p>
@@ -203,6 +199,7 @@ export default function TitlesPage() {
         </p>
         <p className="mt-3 text-xs text-cha">最終確認日：{LAST_VERIFIED}</p>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

@@ -31,6 +31,14 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* スマホで万一どこかが画面より横に広くなっても、ページ全体が横にズレて
+     文字が右はじで切れたりしないようにする安全フタ。
+     （clip は overflow:hidden と違い、上に貼りつくメニュー＝sticky を壊さない） */
+  overflow-x: clip;
+  /* 子ども・はじめての人にも読みやすいよう、全体の文字をほんの少し大きめに（16px → 約17px）。
+     ここの % を変えると全ページの文字がいっせいに大きく／小さくなる。
+     例：112.5% で約18px（もっと大きく）／100% で元の大きさ。比率（見出しと本文の差）は保たれる。 */
+  font-size: 106.25%;
 }
 
 body {
@@ -70,6 +78,14 @@ ruby rt {
   color: var(--color-cha);
   font-weight: 400;
   letter-spacing: 0;
+}
+
+/* キーボードで操作したとき、今どこを触っているかが分かる金色の枠。
+   マウスのクリックでは出さず、Tab キーなどで動かしたときだけ出す。 */
+:focus-visible {
+  outline: 2px solid var(--color-kin);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 /* 章などにアンカーで飛んだとき、固定ナビに隠れないように */
@@ -801,7 +817,12 @@ ruby rt {
 
 /* トップページの入口カード */
 .home-card {
-  display: block;
+  /* カードの中身を縦にならべ、高さを 100% にそろえる。
+     grid 側の auto-rows-fr と組み合わせて、全カードの高さと
+     「ひらく →」の位置を一直線にそろえる（段差をなくす）。 */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   position: relative;
   overflow: hidden;
   border-radius: 16px;
@@ -847,7 +868,9 @@ ruby rt {
   line-height: 1.85;
 }
 .home-card .hc-go {
-  margin-top: 1rem;
+  /* つねにカードの一番下にそろえる（auto で上の余白を吸わせる） */
+  margin-top: auto;
+  padding-top: 1.1rem;
   color: var(--color-shu);
   font-family: var(--font-mincho);
   letter-spacing: 0.05em;

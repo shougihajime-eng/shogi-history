@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { HISTORY, SOURCES, LAST_VERIFIED } from "@/data/shogi";
 import ReadingAids from "../ReadingAids";
 import Koma from "../Koma";
+import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
   title: "将棋の歴史｜やさしい年表",
@@ -30,7 +31,7 @@ const furibisha: Strategy[] = [
     summary:
       "飛車を左から4番目の筋に振る、振り飛車の代表格。400年以上前からある、もっとも歴史の長い戦法のひとつです。",
     timeline: [
-      { when: "1607年（江戸の初め）", what: "現存する最古の記録。初代・大橋宗桂 対 本因坊算砂の対局で、後手の算砂が採用。" },
+      { when: "1607年（江戸の初め）", what: "現存する最古級の棋譜のひとつ（いちばん古い棋譜の年は1605年説・1607年説があります）。初代・大橋宗桂 対 本因坊算砂の対局で、後手の算砂が四間飛車を採用。" },
       { when: "1853年", what: "天野宗歩の定跡書『将棋精選』に、四間飛車＋美濃囲いの形が登場。" },
       { when: "1960年代（昭和）", what: "大山康晴 十五世名人が愛用し、全盛期を築く。森安秀光も主要な担い手。" },
       { when: "1990年代後半", what: "藤井猛が「藤井システム」を確立し、升田幸三賞を受賞（受賞年の表記は資料により1996年度・1997年で揺れあり）。" },
@@ -234,6 +235,24 @@ const joryuHolders = [
   { who: "西山朋佳", titles: "白玲・女流名人・女流王将（3冠）" },
 ];
 
+// 女流タイトルを多くとった人（通算獲得数の多い順）　koma＝駒に入れる一文字／born＝生まれた年
+// 出典：各棋士のウィキペディア（西山朋佳の記事に2026年2月8日時点の歴代順位の記載あり）
+const joryuStrength: { name: string; reading: string; koma: string; titles: number; born: number; note?: string }[] = [
+  { name: "福間香奈", reading: "ふくま かな", koma: "福", titles: 68, born: 1992, note: "旧姓・里見香奈。歴代1位で、今も数を伸ばし続けています。" },
+  { name: "清水市代", reading: "しみず いちよ", koma: "清", titles: 43, born: 1969, note: "1990年代からの第一人者。2025年に連盟会長に。" },
+  { name: "西山朋佳", reading: "にしやま ともか", koma: "西", titles: 21, born: 1995, note: "現代のもう一人の主役。" },
+  { name: "中井広恵", reading: "なかい ひろえ", koma: "中", titles: 19, born: 1969, note: "清水市代との名勝負で女流黄金時代を築いた。" },
+  { name: "林葉直子", reading: "はやしば なおこ", koma: "林", titles: 15, born: 1968, note: "女流王将を10連覇。" },
+];
+const joryuMax = Math.max(...joryuStrength.map((j) => j.titles)); // 68（福間）
+
+// 女流「活やくした時代」の帯：生まれた年の早い順。みなさんご存命。
+const joryuByBorn = [...joryuStrength].sort((a, b) => a.born - b.born);
+const JW_MIN = 1960;
+const JW_MAX = 2030;
+const JW_NOW = 2026;
+const jwPos = (year: number) => ((year - JW_MIN) / (JW_MAX - JW_MIN)) * 100; // 0〜100%
+
 // 出典（このページで確かめた場所）
 const pageSources = [
   SOURCES.jsa,
@@ -243,6 +262,7 @@ const pageSources = [
   { label: "ウィキペディア「女流棋士 (将棋)」", url: "https://ja.wikipedia.org/wiki/女流棋士_(将棋)" },
   { label: "ウィキペディア「将棋の女流タイトル在位者一覧」", url: "https://ja.wikipedia.org/wiki/将棋の女流タイトル在位者一覧" },
   { label: "東京新聞「女性初、日本将棋連盟会長に就任 清水市代さん」", url: "https://www.tokyo-np.co.jp/article/421940" },
+  { label: "ウィキペディア「福間香奈」「清水市代」「西山朋佳」ほか各女流棋士（女流タイトル通算獲得数）", url: "https://ja.wikipedia.org/wiki/福間香奈" },
   { label: "ウィキペディア「棒銀」", url: "https://ja.wikipedia.org/wiki/棒銀" },
   { label: "ウィキペディア「右四間飛車」", url: "https://ja.wikipedia.org/wiki/右四間飛車" },
   { label: "ウィキペディア「雁木囲い」", url: "https://ja.wikipedia.org/wiki/雁木囲い" },
@@ -252,13 +272,24 @@ const pageSources = [
 /* =========================================================================
    小さな部品
    ========================================================================= */
-function SectionTitle({ id, kicker, children }: { id: string; kicker: string; children: ReactNode }) {
+function SectionTitle({
+  id,
+  kicker,
+  koma,
+  children,
+}: {
+  id: string;
+  kicker: string;
+  koma?: string;
+  children: ReactNode;
+}) {
   return (
     <div id={id} data-era-anchor className="scroll-mt-24">
       <p className="text-shu font-mincho tracking-widest text-sm">{kicker}</p>
-      <h2 className="font-mincho text-2xl sm:text-3xl text-sumi border-b-2 border-cha-light/40 pb-2 mt-1">
-        {children}
-      </h2>
+      <div className="flex items-center gap-2.5 border-b-2 border-cha-light/40 pb-2 mt-1">
+        {koma && <Koma char={koma} className="h-8 w-7 shrink-0" />}
+        <h2 className="font-mincho text-2xl sm:text-3xl text-sumi leading-tight">{children}</h2>
+      </div>
     </div>
   );
 }
@@ -303,17 +334,16 @@ function StrategyCard({ s }: { s: Strategy }) {
    ========================================================================= */
 export default function HistoryPage() {
   return (
-    <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
+    <>
       <ReadingAids />
-
-      <p className="font-mincho tracking-[0.3em] text-shu text-sm">SHOGI HISTORY</p>
-      <h1 className="font-mincho text-3xl sm:text-4xl mt-2 text-sumi leading-tight">
-        将棋の歴史 ― やさしい年表 ―
-      </h1>
-      <p className="mt-5 text-sumi-soft leading-relaxed text-sm sm:text-base">
-        将棋がどこで生まれ、どうやって日本で育ってきたのかを、昔から今まで順番にたどれる年表です。
-        戦い方（戦法）や、女流棋士の歩みもまとめました。むずかしい言葉にはふりがなや言いかえを添えています。
-      </p>
+      <PageHero
+        kicker="SHOGI HISTORY ・ 年表"
+        title="将棋の歴史"
+        reading="しょうぎのれきし"
+        koma="歩"
+        lead="将棋がどこで生まれ、どうやって日本で育ってきたのかを、昔から今まで順番にたどれる年表です。戦い方（戦法）や、女流棋士の歩みもまとめました。むずかしい言葉にはふりがなや言いかえを添えています。"
+      />
+      <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
 
       <nav className="mt-6 flex flex-wrap gap-2 text-sm">
         {[
@@ -336,7 +366,7 @@ export default function HistoryPage() {
       <div className="mt-12 space-y-20">
         {/* ============ 将棋ぜんたいの歴史 ============ */}
         <section className="space-y-8">
-          <SectionTitle id="zentai" kicker="その一">
+          <SectionTitle id="zentai" kicker="その一" koma="王">
             将棋ぜんたいの歴史
           </SectionTitle>
 
@@ -376,7 +406,7 @@ export default function HistoryPage() {
 
         {/* ============ 戦法（戦い方）の歴史 ============ */}
         <section className="space-y-8">
-          <SectionTitle id="senpo" kicker="その二">
+          <SectionTitle id="senpo" kicker="その二" koma="角">
             戦法（戦い方）の歴史
           </SectionTitle>
 
@@ -416,7 +446,7 @@ export default function HistoryPage() {
 
         {/* ============ 女流棋士の歴史 ============ */}
         <section className="space-y-8">
-          <SectionTitle id="joryu" kicker="その三">
+          <SectionTitle id="joryu" kicker="その三" koma="玉">
             女流棋士の歴史
           </SectionTitle>
 
@@ -442,7 +472,7 @@ export default function HistoryPage() {
 
         {/* ============ 女流タイトルの流れ ============ */}
         <section className="space-y-8">
-          <SectionTitle id="jtitles" kicker="その四">
+          <SectionTitle id="jtitles" kicker="その四" koma="金">
             女流タイトルの流れ
           </SectionTitle>
 
@@ -487,11 +517,104 @@ export default function HistoryPage() {
               ※ 対局の結果でこの顔ぶれは変わります。最新は日本将棋連盟の公式サイトでご確認ください。
             </p>
           </div>
+
+          {/* 女流の強さくらべ（タイトル獲得数の帯グラフ） */}
+          <div className="pt-4">
+            <h3 className="font-mincho text-xl text-cha">女流の強さくらべ ― タイトルをとった数</h3>
+            <p className="mt-2 text-sumi-soft text-sm leading-relaxed">
+              女流タイトル戦で頂点に立った回数（通算獲得数）を、多い順にならべました。
+              <span className="font-bold text-cha"> 福間香奈 </span>さんが歴代1位、
+              いまも記録を伸ばし続けています。
+            </p>
+
+            <ul className="mt-5 space-y-2.5">
+              {joryuStrength.map((j, i) => {
+                const isTop = i === 0;
+                return (
+                  <li key={j.name} className="flex items-center gap-2.5">
+                    <Koma
+                      char={j.koma}
+                      tone={isTop ? "gold" : "wood"}
+                      className="h-9 w-8 shrink-0"
+                      title={j.name}
+                    />
+                    <span className="w-[4.5rem] sm:w-24 shrink-0 font-mincho text-sm text-sumi truncate">
+                      {j.name}
+                    </span>
+                    <div className="flex-1 h-6 rounded-full bg-washi-3/70 overflow-hidden ring-1 ring-cha-light/20">
+                      <div
+                        className={`h-full rounded-full ${isTop ? "bg-kin" : "bg-shu"}`}
+                        style={{ width: `${(j.titles / joryuMax) * 100}%` }}
+                      />
+                    </div>
+                    <span className="w-12 shrink-0 text-right font-mincho text-sm text-cha">
+                      {j.titles}期
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mt-3 text-xs text-sumi-faint leading-relaxed">
+              ※ 女流タイトルの通算獲得数（2026年2月時点・変わります）。出典は各棋士のウィキペディア。
+              福間さんの数はその後も増えています。
+            </p>
+          </div>
+
+          {/* 女流の活やくした時代（生まれた年の帯） */}
+          <div className="pt-6">
+            <h3 className="font-mincho text-xl text-cha">女流の活やくした時代</h3>
+            <p className="mt-2 text-sumi-soft text-sm leading-relaxed">
+              いつの時代の人かを帯で表しました（生まれてから今まで／みなさんご存命）。
+              <span className="font-bold text-cha"> 林葉・清水・中井 </span>の3人（1968〜69年生まれ）が女流黄金時代をつくり、
+              少し間をおいて <span className="font-bold text-cha"> 福間・西山 </span>（1992〜95年生まれ）の世代へと続きます。
+            </p>
+
+            <div className="mt-5">
+              <div className="space-y-2.5">
+                {joryuByBorn.map((j) => {
+                  const left = jwPos(j.born);
+                  const right = jwPos(JW_NOW);
+                  return (
+                    <div key={j.name} className="flex items-center gap-2.5">
+                      <span className="w-[4.5rem] sm:w-24 shrink-0 font-mincho text-sm text-sumi truncate">
+                        {j.name}
+                      </span>
+                      <div className="relative flex-1 h-7">
+                        {/* 目盛りの線（1980・2000・2020年） */}
+                        <span className="absolute inset-y-0 left-[28.57%] w-px bg-cha-light/25" aria-hidden="true" />
+                        <span className="absolute inset-y-0 left-[57.14%] w-px bg-cha-light/25" aria-hidden="true" />
+                        <span className="absolute inset-y-0 left-[85.71%] w-px bg-cha-light/25" aria-hidden="true" />
+                        {/* 時代の帯 */}
+                        <span
+                          className="absolute inset-y-0 my-auto h-5 rounded-full bg-shu flex items-center px-2"
+                          style={{ left: `${left}%`, width: `${Math.max(right - left, 4)}%` }}
+                          title={`${j.name}（${j.born}年生まれ）`}
+                        >
+                          <span className="text-[10px] text-washi whitespace-nowrap">{j.born}〜</span>
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 年の目盛り（下） */}
+              <div className="relative mt-1 ml-[4.5rem] sm:ml-24 pl-2.5 h-4 text-[10px] text-sumi-faint">
+                <span className="absolute left-0">1960年</span>
+                <span className="absolute left-[28.57%]">1980年</span>
+                <span className="absolute left-[57.14%]">2000年</span>
+                <span className="absolute left-[85.71%]">2020年</span>
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-sumi-faint leading-relaxed">
+              ※ 生まれた年の出典は各棋士のウィキペディア（林葉1968・清水1969・中井1969・福間1992・西山1995）。
+            </p>
+          </div>
         </section>
 
         {/* ============ 出典 ============ */}
         <section className="space-y-5">
-          <SectionTitle id="sources" kicker="その五">
+          <SectionTitle id="sources" kicker="その五" koma="歩">
             出典（どこで確かめたか）
           </SectionTitle>
           <p className="text-sumi-soft text-sm leading-relaxed">
@@ -516,5 +639,6 @@ export default function HistoryPage() {
         </section>
       </div>
     </div>
+    </>
   );
 }

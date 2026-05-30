@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import SiteNav from "./SiteNav";
+import BackToTop from "./BackToTop";
 
 export const metadata: Metadata = {
   title: "将棋の歴史｜やさしい年表とタイトルの記録",
@@ -48,6 +49,9 @@ export default function RootLayout({
         <SiteNav />
 
         {children}
+
+        {/* 下までスクロールすると右下に出る「上にもどる」ボタン（年表ページ以外） */}
+        <BackToTop />
       </body>
     </html>
   );

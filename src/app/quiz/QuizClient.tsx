@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   buildQuiz,
   LEVEL_LABEL,
   type Level,
   type PreparedQuestion,
 } from "@/lib/quiz";
+import Koma from "@/app/Koma";
 
 /* =========================================================================
    共通の小物
@@ -45,7 +46,7 @@ function LevelPicker({
             type="button"
             onClick={() => onChange(lv.key)}
             className={
-              "rounded-full px-4 py-1.5 text-sm border transition-colors " +
+              "rounded-full px-4 py-2 text-sm border transition-colors " +
               (active
                 ? "bg-kon text-washi border-kon"
                 : "bg-washi text-sumi border-cha-light/40 hover:bg-washi-3")
@@ -85,6 +86,26 @@ function PlayMode() {
     start("all");
   }, [start]);
 
+  // キーボードでも遊べるように（パソコン向け）：1・2・3 で回答、Enter / スペースで次へ
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (questions.length === 0 || index >= questions.length) return;
+      if (selected === null) {
+        const map: Record<string, number> = { "1": 0, "2": 1, "3": 2 };
+        const n = map[e.key];
+        if (n !== undefined && n < questions[index].choices.length) {
+          e.preventDefault();
+          choose(n);
+        }
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        next();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selected, index, questions]);
+
   function changeLevel(lv: LevelFilter) {
     setLevel(lv);
     start(lv);
@@ -112,6 +133,11 @@ function PlayMode() {
       <div className="space-y-2">
         <p className="text-sumi-soft text-sm">むずかしさを選んでね</p>
         <LevelPicker value={level} onChange={changeLevel} />
+        {!finished && (
+          <p className="hidden sm:block pt-1 text-xs text-sumi-faint">
+            💡 パソコンなら、キーボードの「1・2・3」で答えを選べます。答え合わせのあとは「Enter」で次の問題へ。
+          </p>
+        )}
       </div>
 
       {finished ? (
@@ -156,16 +182,39 @@ function Card({
   const answered = selected !== null;
   const correct = answered && selected === question.answerIndex;
 
+  // 答えたら「次へ」ボタンを画面内に入れる（スマホで見落とさないように）
+  const nextRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (answered) {
+      nextRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }, [answered]);
+
   return (
     <div className="rounded-xl border border-cha-light/30 bg-washi-2 p-5 sm:p-6 space-y-5">
       {/* 進み具合と点数 */}
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-kin font-mincho">
-          第{index + 1}問 / 全{total}問
-        </span>
-        <span className="text-sumi-soft">
-          正解 {score} / {index + (answered ? 1 : 0)}
-        </span>
+      <div>
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-kin font-mincho">
+            第{index + 1}問 / 全{total}問
+          </span>
+          <span className="text-sumi-soft">
+            正解 {score} / {index + (answered ? 1 : 0)}
+          </span>
+        </div>
+        {/* あと何問かが一目で分かる進みバー */}
+        <div
+          className="mt-2 h-1.5 overflow-hidden rounded-full bg-washi-3/70"
+          role="progressbar"
+          aria-valuenow={index + (answered ? 1 : 0)}
+          aria-valuemin={0}
+          aria-valuemax={total}
+        >
+          <div
+            className="h-full rounded-full bg-kin transition-[width] duration-300 ease-out"
+            style={{ width: `${((index + (answered ? 1 : 0)) / total) * 100}%` }}
+          />
+        </div>
       </div>
 
       {/* むずかしさのしるし */}
@@ -184,12 +233,20 @@ function Card({
           const isAnswer = i === question.answerIndex;
           const isPicked = i === selected;
 
-          let cls =
-            "border-cha-light/40 bg-washi hover:bg-washi-3 text-sumi";
+          // ボタン全体の色（未回答／正解＝抹茶／選んだまちがい＝朱／その他）
+          let cls = "border-cha-light/40 bg-washi hover:bg-washi-3 text-sumi";
+          // 左の丸い番号バッジの色
+          let badge = "border-cha-light/50 bg-washi text-cha";
           if (answered) {
-            if (isAnswer) cls = "border-emerald-500 bg-emerald-50 text-emerald-900";
-            else if (isPicked) cls = "border-shu bg-shu/10 text-shu";
-            else cls = "border-cha-light/30 bg-washi text-sumi-soft opacity-60";
+            if (isAnswer) {
+              cls = "border-[#6f8f5a] bg-[#eef3e6] text-[#33502a]";
+              badge = "border-transparent bg-[#6f8f5a] text-white";
+            } else if (isPicked) {
+              cls = "border-shu bg-shu/10 text-shu";
+              badge = "border-transparent bg-shu text-washi";
+            } else {
+              cls = "border-cha-light/30 bg-washi text-sumi-soft opacity-60";
+            }
           }
 
           return (
@@ -199,17 +256,25 @@ function Card({
               disabled={answered}
               onClick={() => onChoose(i)}
               className={
-                "w-full text-left rounded-lg border px-4 py-3 flex items-center gap-3 transition-colors " +
+                "flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors " +
+                (answered ? "" : "active:scale-[0.99] ") +
                 cls
               }
             >
-              <span className="font-mincho shrink-0 w-6 text-center text-cha">
+              <span
+                className={
+                  "grid h-8 w-8 shrink-0 place-items-center rounded-full border font-mincho text-sm transition-colors " +
+                  badge
+                }
+              >
                 {MARK[i]}
               </span>
-              <span className="flex-1">{c}</span>
-              {answered && isAnswer && <span className="text-emerald-600">◯</span>}
+              <span className="flex-1 leading-snug">{c}</span>
+              {answered && isAnswer && (
+                <span className="shrink-0 text-lg text-[#5a7a45]">◯</span>
+              )}
               {answered && isPicked && !isAnswer && (
-                <span className="text-shu">✕</span>
+                <span className="shrink-0 text-lg text-shu">✕</span>
               )}
             </button>
           );
@@ -221,18 +286,19 @@ function Card({
         <div className="space-y-4">
           <div
             className={
-              "rounded-lg p-4 text-sm leading-relaxed " +
+              "rounded-lg border p-4 text-sm leading-relaxed " +
               (correct
-                ? "bg-emerald-50 text-emerald-900"
-                : "bg-shu/10 text-sumi")
+                ? "border-[#6f8f5a]/40 bg-[#eef3e6] text-[#33502a]"
+                : "border-shu/30 bg-shu/10 text-sumi")
             }
           >
-            <p className="font-bold mb-1">
+            <p className="mb-1 font-bold">
               {correct ? "せいかい！🎉" : "ざんねん…"}
             </p>
             <p>{question.explain}</p>
           </div>
           <button
+            ref={nextRef}
             type="button"
             onClick={onNext}
             className="w-full rounded-lg bg-kon text-washi py-3 font-mincho hover:bg-kon-light transition-colors"
@@ -264,6 +330,12 @@ function Result({
 
   return (
     <div className="rounded-xl border border-cha-light/30 bg-kon text-washi p-8 text-center space-y-5">
+      <Koma
+        char={ratio >= 0.8 ? "祝" : "棋"}
+        tone="gold"
+        className="mx-auto h-16 w-14"
+        title="けっか"
+      />
       <p className="font-mincho text-kin">けっか</p>
       <p className="font-mincho text-4xl">
         {score}
@@ -340,7 +412,7 @@ function PrintMode() {
                   type="button"
                   onClick={() => changeCount(c.value)}
                   className={
-                    "rounded-full px-4 py-1.5 text-sm border transition-colors " +
+                    "rounded-full px-4 py-2 text-sm border transition-colors " +
                     (active
                       ? "bg-kon text-washi border-kon"
                       : "bg-washi text-sumi border-cha-light/40 hover:bg-washi-3")

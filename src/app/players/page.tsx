@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { PLAYERS, SOURCES, LAST_VERIFIED, RANKING_AS_OF } from "@/data/shogi";
 import Koma from "../Koma";
+import PageHero from "@/components/PageHero";
+import SectionHeading from "@/components/SectionHeading";
 
 export const metadata: Metadata = {
   title: "名棋士の話｜将棋の歴史",
@@ -22,19 +24,18 @@ const pos = (year: number) => ((year - AXIS_MIN) / SPAN) * 100; // 0〜100%
 
 export default function PlayersPage() {
   return (
-    <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
-      <p className="font-mincho tracking-[0.3em] text-shu text-sm">MEIKISHI</p>
-      <h1 className="font-mincho text-3xl sm:text-4xl mt-2 text-sumi leading-tight">名棋士の話</h1>
-      <p className="mt-5 text-sumi-soft leading-relaxed text-sm sm:text-base">
-        将棋の歴史には、その時代の頂点に立った「名棋士（めいきし）」がいます。
-        まずは「強さ（とったタイトルの数）」と「活やくした時代」を図で見わたし、そのあと一人ずつ紹介します。
-      </p>
+    <>
+      <PageHero
+        kicker="MEIKISHI ・ 名棋士"
+        title="名棋士の話"
+        koma="王"
+        lead="その時代の頂点に立った「名棋士（めいきし）」たち。まずは強さ（とったタイトルの数）と活やくした時代を図で見わたし、そのあと一人ずつ紹介します。"
+      />
+      <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
 
       {/* ============ 強さくらべ（帯グラフ） ============ */}
       <section className="mt-10">
-        <h2 className="font-mincho text-2xl text-sumi border-b-2 border-cha-light/40 pb-2">
-          強さくらべ ― タイトルをとった数
-        </h2>
+        <SectionHeading koma="金">強さくらべ ― タイトルをとった数</SectionHeading>
         <p className="mt-3 text-sumi-soft text-sm leading-relaxed">
           頂点をかけた「タイトル戦」で優勝した回数（通算獲得数）を、多い順にならべました。
           帯（おび）が長いほどたくさんとった人です。
@@ -74,9 +75,7 @@ export default function PlayersPage() {
 
       {/* ============ 活やくした時代（帯） ============ */}
       <section className="mt-14">
-        <h2 className="font-mincho text-2xl text-sumi border-b-2 border-cha-light/40 pb-2">
-          活やくした時代
-        </h2>
+        <SectionHeading koma="歩">活やくした時代</SectionHeading>
         <p className="mt-3 text-sumi-soft text-sm leading-relaxed">
           それぞれの棋士が「いつの時代の人か」を帯で表しました（生まれてから今、または亡くなるまで）。
           時代がとなりへ少しずつ重なりながら、頂点が受けつがれてきたのが分かります。
@@ -138,9 +137,7 @@ export default function PlayersPage() {
       </section>
 
       {/* ============ 一人ずつ、くわしく ============ */}
-      <h2 className="mt-14 font-mincho text-2xl text-sumi border-b-2 border-cha-light/40 pb-2">
-        一人ずつ、くわしく
-      </h2>
+      <SectionHeading koma="王" className="mt-14">一人ずつ、くわしく</SectionHeading>
       <div className="mt-6 space-y-5">
         {PLAYERS.map((p) => {
           const src = SOURCES[p.source];
@@ -187,6 +184,7 @@ export default function PlayersPage() {
       </div>
 
       <p className="mt-10 text-xs text-cha">最終確認日：{LAST_VERIFIED}</p>
-    </div>
+      </div>
+    </>
   );
 }
