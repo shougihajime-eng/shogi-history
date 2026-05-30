@@ -140,12 +140,19 @@ export default function HomePage() {
           <h1 className="mt-3 text-5xl font-extrabold leading-tight text-sumi sm:text-7xl">
             将棋の歴史
           </h1>
-          <div className="my-6 flex w-full max-w-md items-center gap-3">
+          {/* 朱色の落款印（らっかんいん＝はんこ）。主役の駒「将」とこの印「棋」で“将棋”になる。
+              手で押したような少しの傾きと、内側のうっすらした枠で本物っぽく。飾りなので aria-hidden。 */}
+          <div className="my-6 flex w-full max-w-md items-center gap-4">
             <span
               className="h-px flex-1"
               style={{ background: "linear-gradient(to right, transparent, var(--color-shu))" }}
             />
-            <span className="h-2.5 w-2.5 rotate-45 bg-shu" />
+            <span
+              aria-hidden="true"
+              className="flex h-9 w-9 -rotate-3 items-center justify-center rounded-[7px] bg-shu font-mincho text-base text-washi shadow-[0_5px_14px_-5px_rgba(143,51,38,0.7)] ring-1 ring-inset ring-washi/30"
+            >
+              棋
+            </span>
             <span
               className="h-px flex-1"
               style={{ background: "linear-gradient(to left, transparent, var(--color-shu))" }}
@@ -156,15 +163,19 @@ export default function HomePage() {
             その長い物語を、やさしい言葉でたどります。
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
+            {/* 主役のボタン：上から下への朱色グラデで奥行きを出し、軽く浮く動きで「押したくなる」感じに */}
             <Link
               href="/history"
-              className="rounded-full bg-shu px-7 py-3 font-mincho text-lg tracking-wide text-washi shadow-lg transition-colors hover:bg-shu-deep"
+              className="group rounded-full bg-gradient-to-b from-shu to-shu-deep px-7 py-3 font-mincho text-lg tracking-wide text-washi shadow-[0_10px_24px_-10px_rgba(143,51,38,0.75)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-12px_rgba(143,51,38,0.85)]"
             >
-              年表を見にいく →
+              年表を見にいく{" "}
+              <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+                →
+              </span>
             </Link>
             <Link
               href="/quiz"
-              className="rounded-full border border-cha/40 bg-washi/60 px-7 py-3 font-mincho text-lg tracking-wide text-cha shadow-sm transition-colors hover:border-shu hover:text-shu"
+              className="rounded-full border border-cha/40 bg-washi/60 px-7 py-3 font-mincho text-lg tracking-wide text-cha shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-shu hover:text-shu hover:shadow-md"
             >
               クイズに挑戦する
             </Link>

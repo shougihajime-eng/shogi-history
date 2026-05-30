@@ -44,6 +44,15 @@ export default function PlayersPage() {
         <ul className="mt-6 space-y-2.5">
           {BY_TITLES.map((p, i) => {
             const isTop = i === 0;
+            // 上位3人はランキングページと同じ金・銀・銅の帯にして、サイト全体で見た目をそろえる
+            const bar =
+              i === 0
+                ? "bg-gradient-to-r from-[#cda64a] to-[#b08534]"
+                : i === 1
+                  ? "bg-gradient-to-r from-[#c3c8ce] to-[#9aa1a9]"
+                  : i === 2
+                    ? "bg-gradient-to-r from-[#c9966a] to-[#a9713f]"
+                    : "bg-shu";
             return (
               <li key={p.name} className="flex items-center gap-2.5">
                 <Koma
@@ -57,7 +66,7 @@ export default function PlayersPage() {
                 </span>
                 <div className="flex-1 h-6 rounded-full bg-washi-3/70 overflow-hidden ring-1 ring-cha-light/20">
                   <div
-                    className={`h-full rounded-full ${isTop ? "bg-kin" : "bg-shu"}`}
+                    className={`h-full rounded-full ${bar}`}
                     style={{ width: `${(p.titles / MAX_TITLES) * 100}%` }}
                   />
                 </div>
@@ -148,20 +157,25 @@ export default function PlayersPage() {
             >
               <Koma char={p.koma} className="h-[52px] w-12 shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-3 flex-wrap">
-                  <h3 className="font-mincho text-2xl text-sumi leading-tight">
-                    <ruby>
-                      {p.name}
-                      <rt>{p.reading}</rt>
-                    </ruby>
-                  </h3>
+                <h3 className="font-mincho text-2xl text-sumi leading-tight">
+                  <ruby>
+                    {p.name}
+                    <rt>{p.reading}</rt>
+                  </ruby>
+                </h3>
+                {/* 大事な事実を、読み飛ばしやすい小さなふだ（バッジ）でそろえる */}
+                <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs">
                   {p.titleNo && (
-                    <span className="text-xs text-washi bg-kon rounded-full px-2.5 py-0.5">
+                    <span className="rounded-full bg-kon px-2.5 py-0.5 font-mincho text-washi">
                       {p.titleNo}
                     </span>
                   )}
-                  <span className="text-sm text-cha">{p.life}</span>
-                  <span className="text-sm text-cha">タイトル{p.titles}期</span>
+                  <span className="rounded-full border border-cha-light/50 px-2.5 py-0.5 text-cha">
+                    {p.life}
+                  </span>
+                  <span className="rounded-full border border-kin/50 bg-[#fbf3dc] px-2.5 py-0.5 font-bold text-cha">
+                    タイトル{p.titles}期
+                  </span>
                 </div>
                 <p className="text-sumi-soft text-sm sm:text-base leading-relaxed mt-3">
                   {p.summary}

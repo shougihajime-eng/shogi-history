@@ -28,15 +28,35 @@ export default function TitlesPage() {
       {/* いまの保持者まとめ */}
       <div className="mt-8 rounded-xl bg-kon text-washi p-6">
         <p className="font-mincho text-kin">いまのタイトル保持者（2026年5月時点・変わります）</p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 text-sm">
-          <div>
-            <p className="font-mincho text-lg">藤井聡太（ふじい そうた）</p>
-            <p className="text-washi-3 mt-1">{CURRENT_HOLDERS.fujii.join("・")}（六冠）</p>
-          </div>
-          <div>
-            <p className="font-mincho text-lg">伊藤匠（いとう たくみ）</p>
-            <p className="text-washi-3 mt-1">{CURRENT_HOLDERS.ito.join("・")}（二冠）</p>
-          </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {[
+            { name: "藤井聡太", reading: "ふじい そうた", koma: "藤", crown: "六冠", titles: CURRENT_HOLDERS.fujii },
+            { name: "伊藤匠", reading: "いとう たくみ", koma: "伊", crown: "二冠", titles: CURRENT_HOLDERS.ito },
+          ].map((h) => (
+            <div key={h.name} className="rounded-lg border border-kin/30 bg-washi/5 p-4">
+              <div className="flex items-center gap-3">
+                <Koma char={h.koma} tone="gold" className="h-11 w-10 shrink-0" title={h.name} />
+                <div className="min-w-0">
+                  <p className="font-mincho text-lg leading-tight">
+                    {h.name}
+                    <span className="ml-1 text-xs text-washi-3">（{h.reading}）</span>
+                  </p>
+                  <p className="font-mincho text-sm text-kin-light">{h.crown}</p>
+                </div>
+              </div>
+              {/* 持っているタイトルを駒のしるしのふだで並べる */}
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {h.titles.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full bg-washi/10 px-2.5 py-0.5 text-xs text-washi ring-1 ring-washi/20"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
         <p className="text-washi-3/80 text-xs mt-4">
           ※ 対局の結果で変わります。最新は日本将棋連盟の公式サイトでご確認ください。
