@@ -20,6 +20,9 @@ yarn-debug.log*
 yarn-error.log*
 dev-server.log
 
+# 開発用の使い捨てスクリプト（スマホ表示の画面撮り）
+cap.mjs
+
 # env files
 .env*.local
 .env

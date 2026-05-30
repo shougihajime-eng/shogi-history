@@ -9,6 +9,26 @@ export const metadata: Metadata = {
     "羽生善治の99期を筆頭に、歴代のタイトル通算獲得数ランキング。出典つき・基準日つきでまとめました。",
 };
 
+// 1〜3位のメダル色（金・銀・銅）。和の配色になじむ落ち着いたトーンにそろえる。
+// disc＝順位の丸メダル、bar＝帯グラフ、card＝行の枠と背景。
+const MEDAL: Record<number, { disc: string; bar: string; card: string }> = {
+  1: {
+    disc: "bg-gradient-to-b from-[#dcb95a] to-[#b08534] text-white ring-[#9c7330]/40",
+    bar: "bg-gradient-to-r from-[#cda64a] to-[#b08534]",
+    card: "border-kin/60 bg-[#fbf3dc]",
+  },
+  2: {
+    disc: "bg-gradient-to-b from-[#d8dce1] to-[#9aa1a9] text-[#3a3f45] ring-[#828891]/40",
+    bar: "bg-gradient-to-r from-[#c3c8ce] to-[#9aa1a9]",
+    card: "border-[#aab0b7] bg-[#f3f4f5]",
+  },
+  3: {
+    disc: "bg-gradient-to-b from-[#d3a273] to-[#a9713f] text-white ring-[#8c5a30]/40",
+    bar: "bg-gradient-to-r from-[#c9966a] to-[#a9713f]",
+    card: "border-[#bb8a5e] bg-[#f7efe5]",
+  },
+};
+
 export default function RankingPage() {
   const max = Math.max(...RANKING.map((r) => r.count));
 
@@ -27,55 +47,62 @@ export default function RankingPage() {
       <ol className="mt-8 space-y-2.5">
         {RANKING.map((r) => {
           const isTop = r.rank === 1;
+          const medal = MEDAL[r.rank];
           return (
             <li
               key={`${r.rank}-${r.name}`}
-              className={`rounded-lg border px-4 py-3 ${
-                isTop ? "bg-washi-3/60 border-kin/60" : "bg-washi-2 border-cha-light/30"
-              }`}
+              className={`rounded-xl border px-3 py-3 sm:px-4 ${
+                medal ? medal.card : "bg-washi-2 border-cha-light/30"
+              } ${isTop ? "shadow-sm" : ""}`}
             >
-              <div className="flex items-center gap-2.5">
-                <span
-                  className={`font-mincho text-center shrink-0 w-7 ${
-                    r.rank <= 3 ? "text-2xl text-shu" : "text-xl text-cha-light"
-                  }`}
-                >
-                  {r.rank}
-                </span>
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                {/* 順位（1〜3位は金・銀・銅のメダル、4位以下は数字） */}
+                {medal ? (
+                  <span
+                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-full font-mincho text-lg shadow-sm ring-1 ${medal.disc}`}
+                    title={`${r.rank}位`}
+                  >
+                    {r.rank}
+                  </span>
+                ) : (
+                  <span className="w-9 shrink-0 text-center font-mincho text-xl text-cha-light">
+                    {r.rank}
+                  </span>
+                )}
                 <Koma
                   char={Array.from(r.name)[0]}
                   tone={isTop ? "gold" : "wood"}
                   className="h-9 w-8 shrink-0"
                   title={r.name}
                 />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-2 flex-wrap">
-                    <span className="font-mincho text-base sm:text-lg text-sumi leading-tight">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <span className="font-mincho text-base leading-tight text-sumi sm:text-lg">
                       <ruby>
                         {r.name}
                         <rt>{r.reading}</rt>
                       </ruby>
                     </span>
                     {r.active && (
-                      <span className="text-[10px] text-washi bg-kon rounded-full px-2 py-0.5">
+                      <span className="rounded-full bg-kon px-2 py-0.5 text-[10px] text-washi">
                         現役・記録更新中
                       </span>
                     )}
                   </div>
                   {/* 帯グラフ */}
-                  <div className="mt-1 h-5 rounded-full bg-washi-3/70 overflow-hidden ring-1 ring-cha-light/20">
+                  <div className="mt-1 h-5 overflow-hidden rounded-full bg-washi-3/70 ring-1 ring-cha-light/20">
                     <div
-                      className={`h-full rounded-full ${isTop ? "bg-kin" : "bg-shu"}`}
+                      className={`h-full rounded-full ${medal ? medal.bar : "bg-shu"}`}
                       style={{ width: `${(r.count / max) * 100}%` }}
                     />
                   </div>
                 </div>
-                <span className="font-mincho text-xl text-sumi shrink-0 tabular-nums">
+                <span className="shrink-0 font-mincho text-xl text-sumi tabular-nums">
                   {r.count}
-                  <span className="text-xs text-cha ml-0.5">期</span>
+                  <span className="ml-0.5 text-xs text-cha">期</span>
                 </span>
               </div>
-              {r.note && <p className="text-xs text-sumi-faint mt-2 leading-relaxed">{r.note}</p>}
+              {r.note && <p className="mt-2 text-xs leading-relaxed text-sumi-faint">{r.note}</p>}
             </li>
           );
         })}
