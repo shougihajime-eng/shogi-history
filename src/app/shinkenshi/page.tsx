@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LAST_VERIFIED } from "@/data/shogi";
+import Koma from "@/app/Koma";
 
 export const metadata: Metadata = {
   title: "真剣師の裏話｜将棋の歴史",
@@ -45,18 +46,37 @@ const SOURCES = [
 
 export default function ShinkenshiPage() {
   return (
-    <div className="read-wrap pb-4">
-      {/* 表紙 */}
-      <header className="read-hero">
-        <p className="eyebrow">SHINKENSHI ── 裏ばなし</p>
-        <h1>真剣師の裏話</h1>
-        <p className="lead">
-          お金を賭けて将棋を指した、ちょっと闇（やみ）の世界の達人たち。
-          <br className="hidden sm:block" />
-          「新宿の殺し屋」「東海の鬼」「最後の真剣師」──伝説の数々を集めました。
-        </p>
+    <div className="pb-4">
+      {/* 表紙：このページは「闇（裏）の世界」の読み物なので、墨色の暗い表紙で
+          開いた瞬間に空気が変わるようにする（他ページの明るい和紙色とわざと変える）。 */}
+      <header className="relative overflow-hidden border-b border-kin/20 bg-gradient-to-b from-[#211c18] to-[#2e2823] text-washi">
+        {/* 背景にうっすら駒（飾り） */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          <span className="absolute -left-3 top-7">
+            <Koma char="香" tone="wood" className="h-24 w-20 opacity-[0.06]" />
+          </span>
+          <span className="absolute -right-2 bottom-2">
+            <Koma char="歩" tone="wood" className="h-20 w-16 opacity-[0.05]" />
+          </span>
+        </div>
+        <div className="read-wrap relative px-5 py-12 text-center sm:py-16">
+          <p className="font-mincho text-xs tracking-[0.3em] text-kin-light sm:text-sm">
+            SHINKENSHI ── 裏ばなし
+          </p>
+          <h1 className="mt-3 font-mincho text-4xl leading-tight text-washi sm:text-5xl">
+            真剣師の裏話
+          </h1>
+          <div className="mx-auto my-5 h-px w-24 bg-gradient-to-r from-transparent via-shu to-transparent" />
+          <p className="mx-auto max-w-xl text-sm leading-relaxed text-washi-3 sm:text-base">
+            お金を賭けて将棋を指した、ちょっと闇（やみ）の世界の達人たち。
+            <br className="hidden sm:block" />
+            「新宿の殺し屋」「東海の鬼」「最後の真剣師」──伝説の数々を集めました。
+          </p>
+        </div>
       </header>
 
+      {/* 本文（中央寄せの読みやすい幅） */}
+      <div className="read-wrap pt-2">
       {/* 楽しみ方（このページだけは「読み物」だという断り） */}
       <div className="note-box">
         <span className="note-title">📖 このページの楽しみ方（だいじ）</span>
@@ -119,6 +139,9 @@ export default function ShinkenshiPage() {
 
         {/* 小池重明 */}
         <article className="person-card">
+          <span className="mb-2 block font-mincho text-xs tracking-[0.25em] text-shu">
+            其の一
+          </span>
           <div className="pc-head">
             <span className="pc-name">
               <ruby>
@@ -167,6 +190,9 @@ export default function ShinkenshiPage() {
 
         {/* 花村元司 */}
         <article className="person-card">
+          <span className="mb-2 block font-mincho text-xs tracking-[0.25em] text-shu">
+            其の二
+          </span>
           <div className="pc-head">
             <span className="pc-name">
               <ruby>
@@ -216,6 +242,9 @@ export default function ShinkenshiPage() {
 
         {/* 大田学 */}
         <article className="person-card">
+          <span className="mb-2 block font-mincho text-xs tracking-[0.25em] text-shu">
+            其の三
+          </span>
           <div className="pc-head">
             <span className="pc-name">
               <ruby>
@@ -325,6 +354,7 @@ export default function ShinkenshiPage() {
         </p>
         <p className="mt-2 text-xs">最終確認日：{LAST_VERIFIED}</p>
       </footer>
+      </div>
     </div>
   );
 }

@@ -25,6 +25,10 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Google Fonts の CSS URL (フォントの読み込みが最初の表示を止めないよう、非ブロッキングで読む)
+const FONT_CSS_URL =
+  "https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap";
+
 export default function RootLayout({
   children,
 }: {
@@ -39,9 +43,19 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
-          rel="stylesheet"
+        {/* フォント CSS は非ブロッキング読み込み:
+            media="print" のまま読み込み開始 → 完了した瞬間に media を all へ切替。
+            読み込み中も本文はシステムフォントで即表示される (描画を止めない)。 */}
+        <link rel="preload" as="style" href={FONT_CSS_URL} />
+        <link id="gf-css" href={FONT_CSS_URL} rel="stylesheet" media="print" />
+        <noscript>
+          <link href={FONT_CSS_URL} rel="stylesheet" />
+        </noscript>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){var l=document.getElementById('gf-css');if(!l)return;function on(){l.media='all';}l.addEventListener('load',on);try{if(l.sheet)on();}catch(e){}})();",
+          }}
         />
       </head>
       <body>
