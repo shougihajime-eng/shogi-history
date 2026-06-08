@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- 背景：和紙色から上品な金茶へ -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3e3b8"/>
+      <stop offset="0.55" stop-color="#d9b663"/>
+      <stop offset="1" stop-color="#b08534"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.12" r="0.95">
+      <stop offset="0" stop-color="#fdf6df" stop-opacity="0.6"/>
+      <stop offset="0.62" stop-color="#fdf6df" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 五角形の駒：クリーム色（和紙の生成り） -->
+    <linearGradient id="koma" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e2"/>
+      <stop offset="0.82" stop-color="#f1e4c4"/>
+      <stop offset="1" stop-color="#f7ecd2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景（金茶の盤地） -->
+  <rect x="0" y="0" width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="0" y="0" width="512" height="512" rx="112" fill="url(#glow)"/>
+
+  <!-- 千年の時を表す、うっすらした年輪のような弧 -->
+  <g fill="none" stroke="#fdf6df" stroke-opacity="0.28" stroke-width="4">
+    <path d="M70 442 A 372 372 0 0 1 442 70"/>
+    <path d="M112 460 A 320 320 0 0 1 460 112"/>
+  </g>
+
+  <!-- 五角形の駒 -->
+  <path d="M256 92 L356 138 L398 432 L114 432 L156 138 Z"
+        fill="url(#koma)" stroke="#9a6a2b" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- 「史」の文字（墨色・明朝） -->
+  <text x="256" y="320" text-anchor="middle"
+        font-family="'Yu Mincho','Hiragino Mincho ProN','Shippori Mincho','Noto Serif JP',serif"
+        font-weight="700" font-size="210" fill="#2a2521">史</text>
+</svg>

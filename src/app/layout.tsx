@@ -10,6 +10,16 @@ export const metadata: Metadata = {
   applicationName: "将棋の歴史",
   authors: [{ name: "将棋の歴史" }],
   keywords: ["将棋", "歴史", "年表", "チャトランガ", "タイトル戦", "藤井聡太", "羽生善治", "大山康晴"],
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  // iPhone/iPad で「ホーム画面に追加」したとき、本物のアプリのように全画面で開く
+  appleWebApp: {
+    capable: true,
+    title: "将棋の歴史",
+    statusBarStyle: "default",
+  },
   openGraph: {
     title: "将棋の歴史｜やさしい年表とタイトルの記録",
     description:
