@@ -45,8 +45,9 @@ export default function SiteNav() {
           将棋の歴史
         </Link>
 
-        {/* 行き先ボタン：スマホでは画面いっぱいを使って自然に折り返す */}
-        <div className="flex flex-wrap items-center gap-1.5 sm:flex-nowrap sm:justify-end">
+        {/* 行き先ボタン：画面が狭いときは自然に折り返す（タブレット幅768pxでの横はみ出しを防ぐ）。
+            広い画面では自動で1行に収まる（必要なときだけ折り返す）。 */}
+        <div className="flex flex-wrap items-center gap-1.5 sm:justify-end">
           {NAV.map((item) => {
             const isActive = pathname === item.href;
             return (
